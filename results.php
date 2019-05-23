@@ -1,6 +1,6 @@
 <?php include 'view/header.php'; ?>
 <main> 
-    <form action="." method="post" id="aligned">
+    <form action="." method="post" id="aligned" >
         <input type="hidden" name="action" value="read">
         <header>
 
@@ -31,10 +31,10 @@
                             <input type="text" name="address" class="form-control" 
                                    value="<?php echo htmlspecialchars($address); ?>" 
                                    placeholder="Address">
-                            <input type="text" name="phone" class="form-control" 
+                            <input class="form-control" type="tel" name="phone"  
                                    value="<?php echo htmlspecialchars($phone); ?>" 
                                    placeholder="Phone">                            
-                            <input type="email" name="email" class="form-control" 
+                            <input class="form-control" type="email" name="email" 
                                    value="<?php echo htmlspecialchars($email); ?>" 
                                    placeholder="Email" required>
                         </div>
@@ -53,7 +53,7 @@
                     <input type="text" class="form-control-sm" 
                            name="<?php echo htmlspecialchars(lcfirst(str_replace(' ', '', $gParts[$i]))); ?>" 
                            id="<?php echo htmlspecialchars(lcfirst(str_replace(' ', '', $gParts[$i]))); ?>" 
-                           value="<?php echo htmlspecialchars(number_format($gParts2[$i])); ?>" readonly>
+                           value="<?php echo htmlspecialchars($gParts2[$i]); ?>" readonly>
                 </div>
 
             </div>

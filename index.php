@@ -1,10 +1,8 @@
 <?php
 
+//session set to one day
 session_set_cookie_params(600, '/');
 session_start();
-
-//session set to one day
-
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -30,6 +28,7 @@ foreach ($gParts as $g) {
     $gPForm[] = lcfirst(str_replace(' ', '', $g));
 }
 $gCount = count($gParts);
+$gParts2 = array();
 
 switch ($action) {
 
@@ -232,18 +231,48 @@ switch ($action) {
         $partsTogether = array_combine($gPForm, $gParts2);
 
 //        $_SESSION['gParts2'] = $partsTogether;
-        $_SESSION['gParts2'] = $gParts2;
+//        $_SESSION['gParts2'] = $gParts2;
         $total = 0;
         foreach ($gParts2 as $g2) {
             $total += $g2;
         }
-        $total = '$' . number_format($total);
+        $total = '$ ' . number_format($total);
 
-        $_SESSION['total'] = $total;
+//        $_SESSION['total'] = $total;
 
         include ('results.php');
         break;
     case 'read':
+        $other = filter_input(INPUT_POST, 'other', FILTER_VALIDATE_INT);
+        $gutter = filter_input(INPUT_POST, 'gutter', FILTER_VALIDATE_INT);
+        $gutter2 = filter_input(INPUT_POST, 'gutter2', FILTER_DEFAULT);
+        $downspout = filter_input(INPUT_POST, 'downspout', FILTER_VALIDATE_INT);
+        $elbowsA = filter_input(INPUT_POST, 'elbowsA', FILTER_VALIDATE_INT);
+        $elbowsB = filter_input(INPUT_POST, 'elbowsB', FILTER_VALIDATE_INT);
+        $insideMiters = filter_input(INPUT_POST, 'insideMiters', FILTER_VALIDATE_INT);
+        $outsideMiters = filter_input(INPUT_POST, 'outsideMiters', FILTER_VALIDATE_INT);
+        $endCapsL = filter_input(INPUT_POST, 'endCapsL', FILTER_VALIDATE_INT);
+        $endCapsR = filter_input(INPUT_POST, 'endCapsR', FILTER_VALIDATE_INT);
+        $insideBayMiter = filter_input(INPUT_POST, 'insideBayMiter', FILTER_VALIDATE_INT);
+        $outsideBayMiter = filter_input(INPUT_POST, 'outsideBayMiter', FILTER_VALIDATE_INT);
+        $outlets = filter_input(INPUT_POST, 'outlets', FILTER_VALIDATE_INT);
+        $hinge = filter_input(INPUT_POST, 'hinge', FILTER_VALIDATE_INT);
+        $drainTileAdaptor = filter_input(INPUT_POST, 'drainTileAdaptor', FILTER_VALIDATE_INT);
+        $fascia = filter_input(INPUT_POST, 'fascia', FILTER_VALIDATE_INT);
+        $soffit = filter_input(INPUT_POST, 'soffit', FILTER_VALIDATE_INT);
+        $total = filter_input(INPUT_POST, 'total');
+
+        $cName = filter_input(INPUT_POST, 'cName');
+        $company = filter_input(INPUT_POST, 'company');
+        $address = filter_input(INPUT_POST, 'address');
+        $email = filter_input(INPUT_POST, 'email');
+        $phone = filter_input(INPUT_POST, 'phone');
+
+        $customer = array("name" => $cName, "company" => $company, "address" => $address, "email" => $email, "phone" => $phone);
+
+        $parts2 = "$gutter $downspout $elbowsA $elbowsB $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $fascia $soffit $other";
+        $gParts2 = explode(" ", $parts2);
+
         $pdf = new PDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
@@ -262,31 +291,32 @@ switch ($action) {
         $pdf->Cell(40, 6, "Total:", 0, 2, 'R', true);
         $pdf->SetFont('');
         $pdf->SetXY(70, 75);
-        for ($i = 0; $i < count($_SESSION['gParts2']); $i++) {
+        for ($i = 0; $i < $gCount; $i++) {
             if ($i % 2) {
-                if ($_SESSION['gParts2'][$i] != 0) {
-                    $pdf->Cell(30, 6, number_format($_SESSION['gParts2'][$i]), 0, 2, 'C');
+                if ($gParts2[$i] != 0) {
+                    $pdf->Cell(30, 6, number_format($gParts2[$i]), 0, 2, 'C');
                 } else {
                     $pdf->Cell(30, 6, "", 0, 2, 'C');
                 }
             } else {
-                if ($_SESSION['gParts2'][$i] != 0) {
-                    $pdf->Cell(30, 6, number_format($_SESSION['gParts2'][$i]), 0, 2, 'C', true);
+                if ($gParts2[$i] != 0) {
+                    $pdf->Cell(30, 6, number_format($gParts2[$i]), 0, 2, 'C', true);
                 } else {
                     $pdf->Cell(30, 6, "", 0, 2, 'C', true);
                 }
             }
         }
-        $pdf->Cell(30, 6, $_SESSION['total'], 0, 2, 'C', true);
+        $pdf->Cell(30, 6, $total, 0, 2, 'C', true);
         $pdf->SetXY(110, 75);
         $pdf->Cell(20, 6, 'Notes:', 0, 2, 'L');
         $pdf->MultiCell(80, 80, '', 1, 'L');
+        
 //        $pdf->Output();
-//            session_unset();
 //            header("Location: .");
-        if (SendIt($pdf)) {
-            session_unset();
-            header("Location: .");
+        
+        if (SendIt($pdf,$customer)) {
+//            header("Location: .");
+            include ('home.php');
         } else {
 //            $_SERVER['PHP_SELF'];
             include ('results.php');
@@ -303,7 +333,7 @@ function phpAlert($msg) {
         <span aria-hidden="true">&times;</span></button></div>';
 }
 
-function SendIt($pdf) {
+function SendIt($pdf,$customer) {
     $mail = new PHPMailer;
     $mail->isSMTP();
     $mail->SMTPDebug = 0;
@@ -321,24 +351,25 @@ function SendIt($pdf) {
     $mail->addReplyTo('heartlandseamless@gmail.com', 'Heartland Seamless');
 //*****Set who the message is to be sent to*****
 //        $mail->addAddress('l.wetzel900@gmail.com', 'Loren Wetzel');
-    $mail->addAddress($_SESSION['customer']['email'], $_SESSION['customer']['name']);
+    $mail->addAddress($customer['email'], $customer['name']);
 
-        $mail->addCC('heartlandseamless@gmail.com');
-//        $mail->addCC('lwetzel90@gmail.com');
+//    $mail->addCC('heartlandseamless@gmail.com');
+        $mail->addCC('lwetzel90@gmail.com');
 //*****Set the subject line*****
     $mail->Subject = 'Heartland Seamless Gutters Bid';
 //*****Read an HTML message body from an external file, convert referenced images to embedded,*****
 //*****convert HTML into a basic plain-text alternative body*****
 // *****       $mail->msgHTML(file_get_contents('contents.html'), __DIR__);*****
-    $mail->Body = $_SESSION['customer']['name'] . "\n" . 'Here is your bid';
-    
+    $mail->Body = $customer['name']."<br><br>".'Here is your bid';
+
 //*****Replace the plain text body with one created manually*****
-    $mail->AltBody = $_SESSION['customer']['name'] . "\n" . 'Here is your bid';
-    
+    $mail->AltBody = $customer['name'] . '\n\r' . 'Here is your bid';
+
 //*****Attach an image file*****
     $doc = $pdf->Output('S');
     $mail->AddStringAttachment($doc, 'bid.pdf', 'base64', 'application/pdf');
 //  *****      $mail->addAttachment('images/phpmailer_mini.png');*****
+
 //send the message, check for errors
     if (!$mail->send()) {
         phpAlert("Mailer Error: " . $mail->ErrorInfo);
