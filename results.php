@@ -11,7 +11,7 @@
                         <p>Contact Us</p>
                         <p>Jonathan Wagner 402.413.0092</p>
                         <p>Junior Reyes 402.309.4913<br>
-                            (Se Habla Español)</p>
+                            (Se Habla Espanol)</p>
                         <p>heartlandseamless@gmail.com </p>
                     </div>
                     <div class="col">
