@@ -1,14 +1,10 @@
 <?php
 
-//session set to one day
-session_set_cookie_params(600, '/');
-session_start();
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+//use PHPMailer\PHPMailer\PHPMailer;
+//use PHPMailer\PHPMailer\Exception;
 
 require ('vendor/autoload.php');
-
+//require ('functions.php');
 require ( "fpdf/fpdf.php" );
 require ('fpdfClass.php');
 //require('wordwrap/wordwrap.php');
@@ -454,7 +450,7 @@ switch ($action) {
 
         $parts2 = "$another $yetAnother $gutterScrews $screen $hangers $offset $zips $gutter $downspout $elbowsA $elbowsB $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $fascia $soffit $other";
         $gParts2 = explode(" ", $parts2);
-
+        
         $pdf = new PDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
@@ -470,7 +466,7 @@ switch ($action) {
             }
         }
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(40, 6, "Total:", 0, 2, 'R', true);
+        $pdf->Cell(40, 6, "Total:", 0, 2, 'R');
         $pdf->SetFont('');
         $pdf->SetXY(70, 75);
         for ($i = 0; $i < $gCount; $i++) {
@@ -488,7 +484,7 @@ switch ($action) {
                 }
             }
         }
-        $pdf->Cell(30, 6, $total, 0, 2, 'C', true);
+        $pdf->Cell(30, 6, $total, 0, 2, 'C');
         $pdf->SetXY(110, 75);
         $pdf->Cell(20, 6, 'Notes:', 0, 2, 'L');
         $pdf->MultiCell(80, 80, '', 1, 'L');
