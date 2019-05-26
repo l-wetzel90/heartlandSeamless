@@ -33,9 +33,8 @@ $gParts2 = array();
 switch ($action) {
 
     case'home':
-        if (!isset($hangers)) {
-            $hangers = "";
-        } if (!isset($hangers2)) {
+        if (!isset($hangers)) { $hangers = ""; } 
+        if (!isset($hangers2)) {
             $hangers2 = "";
         }
         if (!isset($zips)) {
@@ -400,8 +399,7 @@ switch ($action) {
         } else {
             $zips = $zips * $zips2;
         }
-
-        $parts2 = "$another $yetAnother $gutterScrews $screen $hangers $offset $zips $gutter $downspout $elbowsA $elbowsB $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $fascia $soffit $other";
+        $parts2 = "$gutter $downspout $elbowsA $elbowsB $offset $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $hangers $zips $screen $gutterScrews $fascia $soffit $other $another $yetAnother";
         $gParts2 = explode(" ", $parts2);
 
 //        $partsTogether = array_combine($gPForm, $gParts2);
@@ -450,7 +448,7 @@ switch ($action) {
 
         $parts2 = "$another $yetAnother $gutterScrews $screen $hangers $offset $zips $gutter $downspout $elbowsA $elbowsB $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $fascia $soffit $other";
         $gParts2 = explode(" ", $parts2);
-        
+
         $pdf = new PDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
@@ -491,7 +489,6 @@ switch ($action) {
 
         $pdf->Output();
 //            header("Location: .");
-
 //        if (SendIt($pdf, $customer)) {
 ////            header("Location: .");
 //            include ('home.php');
