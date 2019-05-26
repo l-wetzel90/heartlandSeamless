@@ -446,7 +446,7 @@ switch ($action) {
 
         $customer = array("name" => $cName, "company" => $company, "address" => $address, "email" => $email, "phone" => $phone);
 
-        $parts2 = "$another $yetAnother $gutterScrews $screen $hangers $offset $zips $gutter $downspout $elbowsA $elbowsB $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $fascia $soffit $other";
+        $parts2 = "$gutter $downspout $elbowsA $elbowsB $offset $insideMiters $outsideMiters $endCapsL $endCapsR $insideBayMiter $outsideBayMiter $outlets $hinge $drainTileAdaptor $hangers $zips $screen $gutterScrews $fascia $soffit $other $another $yetAnother";
         $gParts2 = explode(" ", $parts2);
 
         $pdf = new PDF();

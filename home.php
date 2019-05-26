@@ -3,7 +3,7 @@
         <input type="hidden" name="action" value="results">
         <header class="container-fluid px-0">
             <div class="row" >
-                <div class="col-auto d-none d-xl-block">
+                <div class="col d-none d-xl-block">
                     <p>Serving Southeast Nebraska</p>
                     <p>Contact Us</p>
                     <p>Jonathan Wagner 402.413.0092</p>
@@ -11,10 +11,10 @@
                         (Se Habla Espanol)</p>
                     <p>heartlandseamless@gmail.com </p>
                 </div>
-                <div class="col-auto">
+                <div class="col">
                     <img src="images/UpdatedLogo.PNG" class="img-fluid" alt="Heartland Logo"/>
                 </div>
-                <div class="col-auto">
+                <div class="col">
                     <h4>
                         Customer Information
                     </h4>
